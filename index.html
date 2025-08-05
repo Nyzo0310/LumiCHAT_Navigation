@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Page</title>
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-box">
+      <img src="/icons/logo.png" alt="Logo" class="logo" />
+      <h2>LumiChat</h2>
+      <p class="subtitle">Your mental health support companion</p>
+
+      <form id="loginForm">
+        <div class="input-group">
+          <label>Email or Student ID</label>
+          <div class="input-icon">
+            <img src="/icons/mail.png" class="input-img" alt="email icon">
+            <input type="text" id="email" placeholder="Enter your email or Student ID" required>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <div class="input-icon">
+            <img src="/icons/lock.png" class="input-img" alt="lock icon">
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <img src="/icons/eye.png" class="input-img eye" alt="eye icon" onclick="togglePassword()">
+          </div>
+        </div>
+
+        <div class="options">
+          <label><input type="checkbox"> Remember me</label>
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <button type="submit">Login</button>
+        <p class="signup">Don’t have an account? <a href="#">Sign up here</a></p>
+        <p id="loginMessage"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
