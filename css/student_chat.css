@@ -28,8 +28,9 @@ body {
 
 .logo-section {
   text-align: center;
-  position: relative;
+  padding: 20px 0 10px 0; /* top, right/left, bottom */
 }
+
 
 .logo {
   width: 60px;
@@ -47,7 +48,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 20px;
+  padding: 0 20px; /* remove top padding */
+  margin-bottom: 170px;
 }
 
 .nav-links a {
@@ -57,29 +59,40 @@ body {
   text-decoration: none;
   color: white;
   font-size: 14px;
-  padding: 10px;
+  padding: 10px 15px;
   border-radius: 10px;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .nav-links a img {
   width: 20px;
   height: 20px;
-  filter: brightness(0) invert(1); /* Make icons white */
+  filter: brightness(0) invert(1);
 }
 
 .nav-links a.active,
 .nav-links a:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(to right, #3b82f6, #1e40af);
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.nav-links a.new-chat {
+  background-color: #1e3a8a;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .logout {
   text-align: center;
   margin-bottom: 20px;
+  margin-right: 130px;
 }
 
 .logout a {
-  color: white;
+  color: red;
   text-decoration: none;
   font-weight: bold;
   display: flex;
@@ -91,7 +104,7 @@ body {
 .logout img {
   width: 20px;
   height: 20px;
-  filter: brightness(0) invert(1); /* White icon */
+  filter: brightness(0) invert(1);
 }
 
 /* ========== CHAT INTERFACE ========== */
@@ -99,16 +112,19 @@ body {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  background-color: #f1f5f9;
+  background-color: #e5e7eb;
 }
 
 .chat-header {
   display: flex;
   justify-content: space-between;
   background: white;
-  padding: 15px 25px;
+  padding: 20px 25px;
   border-bottom: 2px solid #e5e7eb;
   font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .chat-wrapper {
@@ -116,19 +132,22 @@ body {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .chat-box {
   background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  margin: 40px auto;
-  padding: 30px;
-  width: 90%;
-  max-width: 900px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 1170px;
+  height: 550px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding: 0;
+  overflow: hidden;
 }
 
 
@@ -136,7 +155,7 @@ body {
   background: linear-gradient(to right, #9333ea, #7c3aed);
   color: white;
   padding: 16px 25px;
-  border-radius: 16px 16px 0 0;
+  border-radius: 20px 20px 0 0;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -150,9 +169,9 @@ body {
 }
 
 .messages {
-  margin-top: 50px;
+  margin-top: 30px;
   flex-grow: 1;
-  padding: 0 25px;
+  padding: 0 30px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -160,37 +179,39 @@ body {
 }
 
 .msg {
-  max-width: 60%;
-  padding: 12px 16px;
+  max-width: 70%;
+  padding: 14px 18px;
   border-radius: 16px;
   font-size: 14px;
   position: relative;
   word-wrap: break-word;
-  line-height: 1.4;
+  line-height: 1.5;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .msg span {
   font-size: 11px;
   display: block;
-  margin-top: px;
+  margin-top: 6px;
   opacity: 0.6;
 }
 
 .msg.bot {
-  background-color: #dbeafe;
+  background-color: #e0f2fe;
   align-self: flex-start;
   color: #1e3a8a;
 }
 
 .msg.bot a {
-  display: block;
-  margin-top: 5px;
+  color: #1d4ed8;
   font-size: 13px;
+  display: block;
+  margin-top: 4px;
   text-decoration: underline;
-  color: #1e40af;
 }
 
 .msg.user {
+  margin-right: 40px;
   background-color: #3b82f6;
   align-self: flex-end;
   color: white;
@@ -212,7 +233,7 @@ body {
   padding: 14px 20px;
   border: none;
   border-radius: 30px;
-  background-color: #f3f4f6;
+  background-color: white;
   font-size: 14px;
   outline: none;
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
@@ -221,22 +242,24 @@ body {
 .send-btn {
   position: absolute;
   right: 30px;
-  background-color: #000;
+  background-color: #1e40af;
   padding: 10px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .send-btn img {
   width: 16px;
   height: 16px;
-  filter: invert(1); /* Make white */
+  filter: invert(1);
 }
 
 .chat-note {
   text-align: center;
   font-size: 12px;
   color: gray;
-  padding: 0 25px 20px;
+  margin-top: 20px;
+
 }
