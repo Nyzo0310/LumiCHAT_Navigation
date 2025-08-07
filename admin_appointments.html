@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LumiCHAT - Appointments</title>
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #eaf1f6;
+    }
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(to bottom, #06b6d4, #9333ea);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .sidebar-top {
+      padding: 0 0 20px 0;
+    }
+    .logo-section {
+      text-align: left;
+      padding: 30px 0 20px 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-section img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+    }
+    .logo-section h2 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: 700;
+    }
+    .close-btn {
+      margin-left: auto;
+      margin-right: 16px;
+      font-size: 30px;
+      cursor: pointer;
+      display: none;
+    }
+    .menu-label {
+      padding: 10px 30px 2px 30px;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #ffffff;
+      opacity: 0.8;
+      text-transform: uppercase;
+    }
+    .sidebar-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 30px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 15px;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+    .sidebar-link.active, .sidebar-link:hover {
+      background: #7952ff36;
+      color: #fff;
+    }
+    .sidebar-link .ri {
+      font-size: 20px;
+      min-width: 20px;
+      text-align: center;
+    }
+    .sidebar-bottom {
+      padding: 20px 30px;
+    }
+    .logout-link {
+      color: #FF3A3A;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+    .logout-link:hover { text-decoration: underline; }
+    /* Main Content */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 28px 45px 18px 45px;
+      border-bottom: 2px solid #b0b0b0;
+    }
+    .main-header h1 {
+      font-size: 28px;
+      font-weight: 500;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+    .main-header .admin-label {
+      font-weight: bold;
+      font-size: 20px;
+      color: #222;
+    }
+    .main-content {
+      padding: 35px 45px 0 45px;
+      flex: 1;
+    }
+    .main-content h2 {
+      font-size: 25px;
+      margin: 0 0 5px 0;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .main-content p {
+      font-size: 15px;
+      color: #444;
+      margin: 0 0 25px 0;
+    }
+    .filters-row {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 16px;
+    }
+    .filter-select, .filter-date {
+      padding: 10px 40px 10px 15px;
+      font-size: 15px;
+      border: none;
+      border-radius: 9px;
+      background: #fff;
+      box-shadow: 0 2px 8px #0001;
+      appearance: none;
+      -webkit-appearance: none;
+      outline: none;
+      font-family: inherit;
+      cursor: pointer;
+      margin-right: 0;
+      position: relative;
+    }
+    .filter-date {
+      background: #fff url('data:image/svg+xml;utf8,<svg fill="gray" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="7" width="14" height="10" rx="2" ry="2"/><rect x="7" y="3" width="1" height="4"/><rect x="12" y="3" width="1" height="4"/></svg>') no-repeat right 16px center/18px 18px;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 9px;
+      padding-left: 16px;
+      box-shadow: 0 2px 8px #0001;
+      height: 44px;
+      width: 230px;
+      margin-left: auto;
+    }
+    .search-box input {
+      border: none;
+      outline: none;
+      font-size: 15px;
+      background: transparent;
+      width: 140px;
+      font-family: inherit;
+    }
+    .search-box .ri-search-line {
+      font-size: 22px;
+      color: #888;
+      margin-left: 5px;
+    }
+    .table-container {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 25px 25px 12px 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 8px #0001;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #f8f9fa;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 15px;
+    }
+    th, td {
+      border: 1px solid #cfd8dc;
+      text-align: left;
+      padding: 10px 14px;
+      vertical-align: middle;
+    }
+    th {
+      background: #f2f2f2;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    tr {
+      background: #f8f9fa;
+    }
+    .btn-view {
+      background: #2979ff;
+      color: #fff;
+      border: none;
+      outline: none;
+      padding: 6px 18px;
+      border-radius: 7px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-view:hover {
+      background: #1861b8;
+    }
+    /* Modal Styles */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(44, 44, 44, 0.35);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      padding: 38px 42px 28px 42px;
+      min-width: 420px;
+      box-shadow: 0 8px 32px #2222;
+      position: relative;
+      max-width: 420px;
+      width: 95vw;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .modal-close {
+      font-size: 32px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal label {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    .modal input {
+      width: 100%;
+      padding: 13px 16px;
+      border: none;
+      background: #f4f6f8;
+      border-radius: 9px;
+      font-size: 16px;
+      margin-bottom: 2px;
+      margin-top: 2px;
+      box-shadow: 0 2px 6px #0001;
+      outline: none;
+    }
+    .modal input[readonly] {
+      color: #222;
+    }
+    .modal .date-input {
+      background: #f4f6f8 url('data:image/svg+xml;utf8,<svg fill="gray" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="7" width="14" height="10" rx="2" ry="2"/><rect x="7" y="3" width="1" height="4"/><rect x="12" y="3" width="1" height="4"/></svg>') no-repeat right 16px center/18px 18px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      justify-content: stretch;
+    }
+    .modal-cancel, .modal-confirm {
+      flex: 1;
+      padding: 14px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 9px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .modal-cancel {
+      background: #ececec;
+      color: #444;
+    }
+    .modal-cancel:hover {
+      background: #e0e0e0;
+    }
+    .modal-confirm {
+      background: #2979ff;
+      color: #fff;
+    }
+    .modal-confirm:hover {
+      background: #1861b8;
+    }
+    @media (max-width: 900px) {
+      .main-content { padding: 25px 8px 0 8px; }
+      .main-header { padding: 18px 8px 10px 8px; }
+      .modal { min-width: unset; max-width: 98vw; }
+      .filters-row { flex-direction: column; align-items: stretch; gap: 12px; }
+      .search-box { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-top">
+        <div class="logo-section">
+          <img src="icons/user.png" alt="Admin Icon">
+          <h2>LumiCHAT</h2>
+          <span class="close-btn">&times;</span>
+        </div>
+        <div class="menu-label">MAIN</div>
+        <div class="sidebar-menu">
+          <a href="#" class="sidebar-link">
+            <i class="ri-dashboard-fill"></i>
+            <span>Dashboard Overview</span>
+          </a>
+          <a href="#" class="sidebar-link">
+            <i class="ri-team-fill"></i>
+            <span>Counselor</span>
+          </a>
+        </div>
+        <div class="menu-label">STUDENT MANAGEMENT</div>
+        <div class="sidebar-menu">
+          <a href="#" class="sidebar-link">
+            <i class="ri-user-3-line"></i>
+            <span>Student Records</span>
+          </a>
+          <a href="#" class="sidebar-link">
+            <i class="ri-user-search-line"></i>
+            <span>Referrals</span>
+          </a>
+          <a href="#" class="sidebar-link active">
+            <i class="ri-calendar-check-line"></i>
+            <span>Appointments</span>
+          </a>
+        </div>
+        <div class="menu-label">REPORTS</div>
+        <div class="sidebar-menu">
+          <a href="#" class="sidebar-link">
+            <i class="ri-message-3-line"></i>
+            <span>Chatbot Sessions</span>
+          </a>
+          <a href="#" class="sidebar-link">
+            <i class="ri-clipboard-line"></i>
+            <span>Self-Assessments</span>
+          </a>
+          <a href="#" class="sidebar-link">
+            <i class="ri-file-search-line"></i>
+            <span>Diagnosis Reports</span>
+          </a>
+        </div>
+        <div class="menu-label">ANALYTICS</div>
+        <div class="sidebar-menu">
+          <a href="#" class="sidebar-link">
+            <i class="ri-bar-chart-box-line"></i>
+            <span>Course Analytics</span>
+          </a>
+        </div>
+      </div>
+      <div class="sidebar-bottom">
+        <a href="#" class="logout-link">Logout</a>
+      </div>
+    </div>
+    <!-- Main -->
+    <div class="main">
+      <div class="main-header">
+        <h1>Appointments</h1>
+        <span class="admin-label">Admin</span>
+      </div>
+      <div class="main-content">
+        <h2>Appointments</h2>
+        <p>Review, confirm, or reschedule student counseling sessions.</p>
+        <div class="filters-row">
+          <select class="filter-select">
+            <option>Select Status</option>
+            <option>Pending</option>
+            <option>Confirmed</option>
+            <option>Cancelled</option>
+          </select>
+          <select class="filter-date">
+            <option>All Dates</option>
+            <option>July 2025</option>
+            <option>June 2025</option>
+          </select>
+          <div class="search-box">
+            <input type="text" placeholder="Search Student name" />
+            <i class="ri-search-line"></i>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <tr>
+              <th>Student Name</th>
+              <th>Counselor Name</th>
+              <th>Date and Time</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+            <tr>
+              <td>Juan De La Cruz</td>
+              <td>Ms. Grace Santos</td>
+              <td>July 30, 2025 · 10:30 AM</td>
+              <td>Pending</td>
+              <td><button class="btn-view" onclick="openAppointmentModal()">View</button></td>
+            </tr>
+            <tr><td colspan="5" style="height: 40px;"></td></tr>
+            <tr><td colspan="5" style="height: 40px;"></td></tr>
+            <tr><td colspan="5" style="height: 40px;"></td></tr>
+            <tr><td colspan="5" style="height: 40px;"></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Appointment Details Modal -->
+  <div class="modal-bg" id="appointmentModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Appointment Details</h2>
+        <span class="modal-close" onclick="closeAppointmentModal()">&times;</span>
+      </div>
+      <form>
+        <label>Student Name</label>
+        <input type="text" value="Juan De La Cruz" readonly />
+
+        <label>Initial Diagnosis Result</label>
+        <input type="text" value="Mild Anxiety (Based on chatbot pre-assessment)" readonly />
+
+        <div style="display: flex; gap: 14px;">
+          <div style="flex: 1;">
+            <label>Assigned Counselor</label>
+            <input type="text" value="Ms. Grace Santos" readonly />
+          </div>
+          <div style="flex: 1;">
+            <label>Appointment Status</label>
+            <input type="text" value="Pending" readonly style="background:#ececec; color:#444; font-weight:500;"/>
+          </div>
+        </div>
+
+        <label style="margin-top:18px;">Preferred Date and Time</label>
+        <input type="text" class="date-input" value="July 30, 2025 · 10:30 AM" readonly />
+
+        <div class="modal-actions" style="margin-top: 25px;">
+          <button type="button" class="modal-cancel">Cancel Appointment</button>
+          <button type="button" class="modal-confirm">Confirm Appointment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    function openAppointmentModal() {
+      document.getElementById('appointmentModal').style.display = 'flex';
+    }
+    function closeAppointmentModal() {
+      document.getElementById('appointmentModal').style.display = 'none';
+    }
+    document.getElementById('appointmentModal').addEventListener('click', function(e) {
+      if (e.target === this) closeAppointmentModal();
+    });
+  </script>
+</body>
+</html>
