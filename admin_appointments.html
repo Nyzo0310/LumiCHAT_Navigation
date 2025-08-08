@@ -16,86 +16,128 @@
       display: flex;
       height: 100vh;
     }
-    .sidebar {
-      width: 260px;
-      background: linear-gradient(to bottom, #06b6d4, #9333ea);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .sidebar-top {
-      padding: 0 0 20px 0;
-    }
-    .logo-section {
-      text-align: left;
-      padding: 30px 0 20px 30px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo-section img {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-    }
-    .logo-section h2 {
-      font-size: 18px;
-      margin: 0;
-      font-weight: 700;
-    }
-    .close-btn {
-      margin-left: auto;
-      margin-right: 16px;
-      font-size: 30px;
-      cursor: pointer;
-      display: none;
-    }
-    .menu-label {
-      padding: 10px 30px 2px 30px;
-      font-size: 12px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      color: #ffffff;
-      opacity: 0.8;
-      text-transform: uppercase;
-    }
-    .sidebar-menu {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .sidebar-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 9px 30px;
-      color: #fff;
-      text-decoration: none;
-      font-size: 15px;
-      border-radius: 8px;
-      transition: 0.2s;
-    }
-    .sidebar-link.active, .sidebar-link:hover {
-      background: #7952ff36;
-      color: #fff;
-    }
-    .sidebar-link .ri {
-      font-size: 20px;
-      min-width: 20px;
-      text-align: center;
-    }
-    .sidebar-bottom {
-      padding: 20px 30px;
-    }
-    .logout-link {
-      color: #FF3A3A;
-      font-weight: bold;
-      text-decoration: none;
-      font-size: 16px;
-      transition: 0.2s;
-    }
-    .logout-link:hover { text-decoration: underline; }
+ /* SIDEBAR BASE */
+.sidebar{
+  width:260px;
+  background: linear-gradient(to bottom,#06b6d4,#9333ea);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+/* Logo */
+.logo-section{
+  padding:30px 0 16px 22px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.logo-section img{width:48px;height:48px;border-radius:50%}
+.logo-section h2{margin:0;font-size:18px;font-weight:700}
+
+/* Group container */
+/* Group container */
+.sidebar-group {
+  padding: 4px 12px 6px;
+}
+
+/* Section title chip + divider */
+.menu-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 6px 4px;
+}
+.menu-title .label-chip {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #ffffff;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.28);
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+  backdrop-filter: saturate(140%) blur(2px);
+}
+.menu-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,.35), rgba(255,255,255,0));
+}
+
+/* Sidebar menu links */
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 0 4px;
+  gap: 2px;
+}
+.sidebar-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 18px;
+  margin: 0 4px;
+  color: rgba(255,255,255,.98);
+  text-decoration: none;
+  font-size: 15px;
+  border-radius: 8px;
+  transition: background .18s, color .18s, transform .1s;
+}
+
+.sidebar-link .ri{font-size:18px;opacity:.95}
+
+/* Hover + Active */
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(3px);
+  transition: all 0.2s ease;
+}
+
+.sidebar-link.active::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:14%;
+  width:4px;
+  height:72%;
+  border-radius:0 4px 4px 0;
+  background:#ffffff;
+  box-shadow:0 0 0 1px rgba(0,0,0,.05) inset;
+}
+
+/* Logout */
+.sidebar-bottom{padding:18px 22px}
+.logout-link{
+  color:#ff5a5a;
+  font-weight:800;
+  text-decoration:none;
+  font-size:16px;
+}
+.logout-link:hover{text-decoration:underline}
+
+/* Compact mode on narrow screens */
+@media (max-width: 700px){
+  .sidebar{width:76px}
+  .logo-section h2,
+  .menu-title .label-chip,
+  .menu-title::after,
+  .sidebar-link span{display:none}
+  .sidebar-group{padding:6px}
+}
+
     /* Main Content */
     .main {
       flex: 1;
@@ -103,15 +145,18 @@
       flex-direction: column;
     }
     .main-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #fff;
-      padding: 28px 45px 18px 45px;
-      border-bottom: 2px solid #b0b0b0;
+       display: flex;
+        justify-content: space-between;
+        background: white;
+        padding: 20px 25px;
+        border-bottom: 2px solid #e5e7eb;
+        font-weight: bold;
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
     .main-header h1 {
-      font-size: 28px;
+      font-size: 20px;
       font-weight: 500;
       margin: 0;
       letter-spacing: 0.5px;
@@ -333,65 +378,76 @@
   <div class="container">
     <!-- Sidebar -->
     <div class="sidebar">
-      <div class="sidebar-top">
-        <div class="logo-section">
-          <img src="icons/user.png" alt="Admin Icon">
-          <h2>LumiCHAT</h2>
-          <span class="close-btn">&times;</span>
-        </div>
-        <div class="menu-label">MAIN</div>
-        <div class="sidebar-menu">
-          <a href="#" class="sidebar-link">
-            <i class="ri-dashboard-fill"></i>
-            <span>Dashboard Overview</span>
-          </a>
-          <a href="#" class="sidebar-link">
-            <i class="ri-team-fill"></i>
-            <span>Counselor</span>
-          </a>
-        </div>
-        <div class="menu-label">STUDENT MANAGEMENT</div>
-        <div class="sidebar-menu">
-          <a href="#" class="sidebar-link">
-            <i class="ri-user-3-line"></i>
-            <span>Student Records</span>
-          </a>
-          <a href="#" class="sidebar-link">
-            <i class="ri-user-search-line"></i>
-            <span>Referrals</span>
-          </a>
-          <a href="#" class="sidebar-link active">
-            <i class="ri-calendar-check-line"></i>
-            <span>Appointments</span>
-          </a>
-        </div>
-        <div class="menu-label">REPORTS</div>
-        <div class="sidebar-menu">
-          <a href="#" class="sidebar-link">
-            <i class="ri-message-3-line"></i>
-            <span>Chatbot Sessions</span>
-          </a>
-          <a href="#" class="sidebar-link">
-            <i class="ri-clipboard-line"></i>
-            <span>Self-Assessments</span>
-          </a>
-          <a href="#" class="sidebar-link">
-            <i class="ri-file-search-line"></i>
-            <span>Diagnosis Reports</span>
-          </a>
-        </div>
-        <div class="menu-label">ANALYTICS</div>
-        <div class="sidebar-menu">
-          <a href="#" class="sidebar-link">
-            <i class="ri-bar-chart-box-line"></i>
-            <span>Course Analytics</span>
-          </a>
-        </div>
-      </div>
-      <div class="sidebar-bottom">
-        <a href="#" class="logout-link">Logout</a>
-      </div>
+  <div class="sidebar-top">
+    <div class="logo-section">
+      <img src="icons/logo.png" alt="LumiCHAT">
+      <h2>LumiCHAT</h2>
     </div>
+
+    <div class="sidebar-group">
+      <div class="menu-title">
+        <span class="label-chip">Main</span>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="admin_dashboard.html" class="sidebar-link">
+          <span>Dashboard Overview</span>
+        </a>
+        <a href="admin_counselor.html" class="sidebar-link">
+          <span>Counselor</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="menu-title">
+        <span class="label-chip">Student Management</span>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="admin_student_records.html" class="sidebar-link">
+          <span>Student Records</span>
+        </a>
+        <a href="admin_referrals.html" class="sidebar-link">
+          <span>Referrals</span>
+        </a>
+        <a href="admin_appointments.html" class="sidebar-link active">
+          <span>Appointments</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="menu-title">
+        <span class="label-chip">Reports</span>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="admin_chatbot_sessions.html" class="sidebar-link">
+          <span>Chatbot Sessions</span>
+        </a>
+        <a href="admin_self_assessments.html" class="sidebar-link">
+          <span>Self-Assessments</span>
+        </a>
+        <a href="admin_diagnosis_reports.html" class="sidebar-link">
+          <span>Diagnosis Reports</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="menu-title">
+        <span class="label-chip">Analytics</span>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="admin_course_analytics.html" class="sidebar-link">
+          <span>Course Analytics</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <a href="index.html" class="logout-link">Logout</a>
+  </div>
+</div>
     <!-- Main -->
     <div class="main">
       <div class="main-header">

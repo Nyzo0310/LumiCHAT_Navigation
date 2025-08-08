@@ -24,54 +24,127 @@
     }
 
     /* Sidebar */
-    .sidebar {
-      width: 260px;
-      background: linear-gradient(to bottom, #06b6d4, #9333ea);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 20px 0;
-    }
+     /* SIDEBAR BASE */
+.sidebar{
+  width:260px;
+  background: linear-gradient(to bottom,#06b6d4,#9333ea);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
 
-    .logo-section {
-      text-align: center;
-      padding-bottom: 20px;
-    }
+/* Logo */
+.logo-section{
+  padding:30px 0 16px 22px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.logo-section img{width:48px;height:48px;border-radius:50%}
+.logo-section h2{margin:0;font-size:18px;font-weight:700}
 
-    .logo-section img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      margin-bottom: 10px;
-    }
+/* Group container */
+/* Group container */
+.sidebar-group {
+  padding: 4px 12px 6px;
+}
 
-    .logo-section h2 {
-      font-size: 18px;
-      margin-top: 5px;
-    }
+/* Section title chip + divider */
+.menu-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 6px 4px;
+}
+.menu-title .label-chip {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #ffffff;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.28);
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+  backdrop-filter: saturate(140%) blur(2px);
+}
+.menu-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,.35), rgba(255,255,255,0));
+}
 
-    .sidebar a {
-      display: flex;
-      align-items: center;
-      padding: 10px 30px;
-      color: white;
-      text-decoration: none;
-      font-size: 14px;
-      transition: 0.3s;
-    }
+/* Sidebar menu links */
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 0 4px;
+  gap: 2px;
+}
+.sidebar-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 18px;
+  margin: 0 4px;
+  color: rgba(255,255,255,.98);
+  text-decoration: none;
+  font-size: 15px;
+  border-radius: 8px;
+  transition: background .18s, color .18s, transform .1s;
+}
 
-    .sidebar a:hover,
-    .sidebar .active {
-      background-color: rgba(255, 255, 255, 0.2);
-      border-left: 4px solid white;
-    }
+.sidebar-link .ri{font-size:18px;opacity:.95}
 
-    .sidebar .logout {
-      color: red;
-      padding: 10px 30px;
-      font-weight: bold;
-    }
+/* Hover + Active */
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(3px);
+  transition: all 0.2s ease;
+}
+
+.sidebar-link.active::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:14%;
+  width:4px;
+  height:72%;
+  border-radius:0 4px 4px 0;
+  background:#ffffff;
+  box-shadow:0 0 0 1px rgba(0,0,0,.05) inset;
+}
+
+/* Logout */
+.sidebar-bottom{padding:18px 22px}
+.logout-link{
+  color:#ff5a5a;
+  font-weight:800;
+  text-decoration:none;
+  font-size:16px;
+}
+.logout-link:hover{text-decoration:underline}
+
+/* Compact mode on narrow screens */
+@media (max-width: 700px){
+  .sidebar{width:76px}
+  .logo-section h2,
+  .menu-title .label-chip,
+  .menu-title::after,
+  .sidebar-link span{display:none}
+  .sidebar-group{padding:6px}
+}
 
     /* Main Content */
     .main {
@@ -121,7 +194,7 @@
     }
     .menu-label {
   padding: 10px 30px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: bold;
   letter-spacing: 1px;
   color: #ffffff;
@@ -180,33 +253,77 @@
 <body>
   <div class="container">
     <!-- Sidebar -->
-    <div class="sidebar">
+ <div class="sidebar">
+  <div class="sidebar-top">
     <div class="logo-section">
-      <img src="icons/user.png" alt="Admin Icon">
+      <img src="icons/logo.png" alt="LumiCHAT">
       <h2>LumiCHAT</h2>
     </div>
 
-    <p class="menu-label">MAIN</p>
-    <a href="#" class="active">Dashboard Overview</a>
-    <a href="#">Counselor</a>
+    <div class="sidebar-group">
+      <div class="menu-title">
+        <span class="label-chip">Main</span>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="admin_dashboard.html" class="sidebar-link active">
+          <span>Dashboard Overview</span>
+        </a>
+        <a href="admin_counselor.html" class="sidebar-link">
+          <span>Counselor</span>
+        </a>
+      </nav>
+    </div>
 
-    <p class="menu-label">STUDENT MANAGEMENT</p>
-    <a href="#">Student Records</a>
-    <a href="#">Referrals</a>
-    <a href="#">Appointments</a>
+    <div class="sidebar-group">
+      <div class="menu-title">
+        <span class="label-chip">Student Management</span>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="admin_student_records.html" class="sidebar-link">
+          <span>Student Records</span>
+        </a>
+        <a href="admin_referrals.html" class="sidebar-link">
+          <span>Referrals</span>
+        </a>
+        <a href="admin_appointments.html" class="sidebar-link">
+          <span>Appointments</span>
+        </a>
+      </nav>
+    </div>
 
-    <p class="menu-label">REPORTS</p>
-    <a href="#">Chatbot Sessions</a>
-    <a href="#">Self-Assessments</a>
-    <a href="#">Diagnosis Reports</a>
+    <div class="sidebar-group">
+      <div class="menu-title">
+        <span class="label-chip">Reports</span>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="admin_chatbot_sessions.html" class="sidebar-link">
+          <span>Chatbot Sessions</span>
+        </a>
+        <a href="admin_self_assessments.html" class="sidebar-link">
+          <span>Self-Assessments</span>
+        </a>
+        <a href="admin_diagnosis_reports.html" class="sidebar-link">
+          <span>Diagnosis Reports</span>
+        </a>
+      </nav>
+    </div>
 
-    <p class="menu-label">ANALYTICS</p>
-    <a href="#">Course Analytics</a>
-
-    <a href="#" class="logout">Logout</a>
+    <div class="sidebar-group">
+      <div class="menu-title">
+        <span class="label-chip">Analytics</span>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="admin_course_analytics.html" class="sidebar-link">
+          <span>Course Analytics</span>
+        </a>
+      </nav>
+    </div>
   </div>
 
-
+  <div class="sidebar-bottom">
+    <a href="index.html" class="logout-link">Logout</a>
+  </div>
+</div>
 
     <!-- Main Content -->
     <div class="main">
