@@ -4,9 +4,10 @@ require_once 'database/db_connect.php';
 $student_name = 'Juan Dela Cruz';
 
 $sql = "SELECT 
-            a.preferred_date, 
-            a.preferred_time, 
-            a.counselor_name
+          a.id,                -- <— add the PK/ID
+          a.preferred_date, 
+          a.preferred_time, 
+          a.counselor_name
         FROM tbl_appointment a
         WHERE a.student_name = ?";
 
@@ -255,24 +256,22 @@ $result = $stmt->get_result();
         </tr>
       </thead>
       <tbody>
-        <?php while ($row = $result->fetch_assoc()): ?>
-        <tr>
-          <td><?= htmlspecialchars($row['counselor_name']) ?></td>
-          <td><?= htmlspecialchars($row['preferred_date']) ?></td>
-          <td><?= htmlspecialchars($row['preferred_time']) ?></td>
-          <td><span style="color: orange; font-weight: bold;">Pending</span></td>
-          <td>
-            <button class="view-btn"
-              data-student="Juan Dela Cruz"
-              data-counselor="<?= htmlspecialchars($row['counselor_name']) ?>"
-              data-status="Pending"
-            >
-              View
-            </button>
-          </td>
-        </tr>
-        <?php endwhile; ?>
-      </tbody>
+      <?php while ($row = $result->fetch_assoc()): ?>
+      <tr data-row-id="<?= (int)$row['id'] ?>">
+        <td><?= htmlspecialchars($row['counselor_name']) ?></td>
+        <td><?= htmlspecialchars($row['preferred_date']) ?></td>
+        <td><?= htmlspecialchars($row['preferred_time']) ?></td>
+        <td><span style="color: orange; font-weight: bold;">Pending</span></td>
+        <td>
+          <button class="view-btn"
+          data-id="<?= (int)$row['id'] ?>"
+          data-student="Juan Dela Cruz"
+          data-counselor="<?= htmlspecialchars($row['counselor_name']) ?>"
+          data-status="Pending">View</button>
+        </td>
+      </tr>
+      <?php endwhile; ?>
+    </tbody>
     </table>
   </div>
 </div>
@@ -285,7 +284,7 @@ $result = $stmt->get_result();
     <p><strong>Student Name:</strong> <span id="modal-student"></span></p>
     <p><strong>Counselor Name:</strong> <span id="modal-counselor"></span></p>
     <p><strong>Appointment Status:</strong> <span id="modal-status"></span></p>
-    <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+    <button id="cancelBtn" class="cancel-btn">Cancel</button>
   </div>
 </div>
 
@@ -293,29 +292,62 @@ $result = $stmt->get_result();
 <script>
   const modal = document.getElementById("appointmentModal");
   const closeModalBtn = document.querySelector(".close");
+  const cancelBtn = document.getElementById("cancelBtn");
 
+  let selected = { id: null, rowEl: null };
+
+  // open modal
   document.querySelectorAll(".view-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      document.getElementById("modal-student").textContent = btn.dataset.student;
+      document.getElementById("modal-student").textContent   = btn.dataset.student;
       document.getElementById("modal-counselor").textContent = btn.dataset.counselor;
-      document.getElementById("modal-status").textContent = btn.dataset.status;
+      document.getElementById("modal-status").textContent    = btn.dataset.status;
+
+      selected.id   = btn.dataset.id;
+      selected.rowEl = btn.closest("tr");
+
       modal.style.display = "flex";
     });
   });
 
-  closeModalBtn.onclick = function() {
-    modal.style.display = "none";
-  }
+  // close helpers
+  function closeModal(){ modal.style.display = "none"; }
+  closeModalBtn.onclick = closeModal;
+  window.onclick = (e)=>{ if(e.target === modal) closeModal(); };
 
-  function closeModal() {
-    modal.style.display = "none";
-  }
+  // delete on Cancel
+  cancelBtn.addEventListener("click", async () => {
+    if(!selected.id) return;
 
-  window.onclick = function(event) {
-    if (event.target === modal) {
-      modal.style.display = "none";
+    if(!confirm("Are you sure you want to cancel this appointment?")) return;
+
+    try {
+      cancelBtn.disabled = true; 
+      cancelBtn.textContent = "Cancelling...";
+
+      const res = await fetch("delete_appointment.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ id: selected.id })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        // remove the row from the table
+        if (selected.rowEl) selected.rowEl.remove();
+        closeModal();
+        alert("Appointment cancelled.");
+      } else {
+        alert(data.message || "Failed to cancel appointment.");
+      }
+    } catch (err) {
+      alert("Network or server error. Please try again.");
+    } finally {
+      cancelBtn.disabled = false; 
+      cancelBtn.textContent = "Cancel";
     }
-  }
+  });
 </script>
 
 </body>

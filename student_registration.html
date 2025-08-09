@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LumiCHAT – Student Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+
+  <style>
+    :root{
+      --bg:#eaf1f6;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --input:#f3f4f6;
+      --ring:#c7d2fe;
+      --primary:#2563eb;
+      --primary-hover:#1e4fcf;
+      --ok:#16a34a;
+      --danger:#ef4444;
+      --radius:14px;
+      --shadow:0 10px 30px rgba(0,0,0,.07);
+      --field-h:44px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Segoe UI',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    .wrap{
+      max-width:720px;
+      margin:48px auto 80px;
+      padding:0 16px 24px;
+    }
+
+    .page-title{
+      text-align:center;
+      font-weight:700;
+      letter-spacing:.2px;
+      margin:8px 0 18px;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px 22px 18px;
+      margin:22px 0;
+    }
+
+    .card h3{
+      margin:0 0 2px;
+      font-size:15px;
+      font-weight:700;
+    }
+    .card p.hint{
+      margin:0 0 14px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .span {
+      margin-top: 100px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+    }
+    @media(min-width:640px){
+      .grid.two{grid-template-columns:1fr 1fr}
+    }
+
+    .field label{
+      display:block;
+      font-size:13px;
+      margin:2px 0 6px;
+      font-weight:600;
+    }
+
+    .input-icon{
+      position:relative;
+      display:flex;
+      align-items:center;
+      height:var(--field-h);
+      border-radius:10px;
+      background:var(--input);
+      padding-left:40px;
+      overflow:hidden;
+      border:1px solid transparent;
+      transition:border-color .15s, box-shadow .15s, background-color .15s;
+    }
+    .input-icon:focus-within{
+      border-color:var(--ring);
+      box-shadow:0 0 0 3px rgba(37,99,235,.18);
+      background:#f9fafb;
+    }
+    .input-icon i{
+      position:absolute;
+      left:12px;
+      color:#6b7280;
+      font-size:18px;
+    }
+    .input-icon input,
+    .input-icon select{
+      width:100%;
+      height:100%;
+      border:0;
+      outline:0;
+      background:transparent;
+      padding:0 12px 0 2px;
+      font-size:14px;
+      color:var(--text);
+      appearance:none;         /* hide native arrow */
+    }
+    /* give room for the dropdown icon on the right */
+    .input-icon select{ padding-right:36px; }
+
+    /* right icon (dropdown/eye) */
+    .input-icon .suffix{
+      position:absolute;
+      right:12px;
+      color:#6b7280;
+      font-size:20px;
+      pointer-events:none;
+    }
+
+    /* eye button clickable */
+    .toggle-eye{
+      position:absolute;
+      right:6px;
+      width:36px; height:36px;
+      display:grid; place-items:center;
+      border-radius:8px;
+      cursor:pointer;
+      color:#6b7280;
+      background:transparent;
+      border:none;
+    }
+    .toggle-eye:hover{background:#eef2ff}
+
+    .policy {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin: 14px 6px 8px; /* ⬅ adds space on top */
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .policy a{color:#374151}
+
+    .btn-primary{
+      width:100%;
+      background:var(--primary);
+      color:#fff;
+      border:none;
+      border-radius:12px;
+      height:48px;
+      font-weight:700;
+      letter-spacing:.2px;
+      cursor:pointer;
+      transition:background .18s, transform .06s;
+      box-shadow:0 6px 18px rgba(37,99,235,.25);
+    }
+    .btn-primary:hover{background:var(--primary-hover)}
+    .btn-primary:disabled{
+      background:#a5b4fc;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+
+    .footer-link{
+      text-align:center;
+      margin-top:10px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    /* Make Return to Login blue like a link */
+    .footer-link a{
+      color:var(--primary);
+      text-decoration:none;
+      font-weight:600;
+    }
+    .footer-link a:hover{ text-decoration:underline; }
+
+    .error{
+      margin-top:8px;
+      color:var(--danger);
+      font-size:12.5px;
+      display:none;
+    }
+    .error.show{display:block}
+    .ok{color:var(--ok)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2 class="page-title">Registration Form</h2>
+
+    <form id="regForm" novalidate>
+      <!-- Personal -->
+      <section class="card">
+        <h3>Personal Information</h3>
+        <p class="hint">Share your name, email, and contact so we can stay in touch.</p>
+
+        <div class="grid">
+          <div class="field">
+            <label for="fullName">Full Name</label>
+            <div class="input-icon">
+              <i class="ri-user-3-line"></i>
+              <input id="fullName" name="fullName" type="text" placeholder="Enter your full name" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email Address</label>
+            <div class="input-icon">
+              <i class="ri-mail-line"></i>
+              <input id="email" name="email" type="email" placeholder="your.email@example.com" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="phone">Contact Number</label>
+            <div class="input-icon">
+              <i class="ri-phone-line"></i>
+              <input id="phone" name="phone" type="tel" placeholder="09XX-XXX-XXXX" required />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Academic -->
+      <section class="card">
+        <h3>Academic Information</h3>
+        <p class="hint">Tell us your course and year level to access tailored support.</p>
+
+        <div class="grid two">
+          <div class="field">
+            <label for="course">Course</label>
+            <div class="input-icon">
+              <i class="ri-graduation-cap-line"></i>
+              <select id="course" name="course" required>
+                <option value="" selected disabled>Select your course</option>
+                <option>BSIT</option>
+                <option>CAS</option>
+                <option>BSBA</option>
+                <option>MIDWIFERY</option>
+                <option>ENGINEERING</option>
+              </select>
+              <i class="ri-arrow-down-s-line suffix"></i>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="year">Year Level</label>
+            <div class="input-icon">
+              <i class="ri-bookmark-2-line"></i>
+              <select id="year" name="year" required>
+                <option value="" selected disabled>Select year level</option>
+                <option>1st Year</option>
+                <option>2nd Year</option>
+                <option>3rd Year</option>
+                <option>4th Year</option>
+              </select>
+              <i class="ri-arrow-down-s-line suffix"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Security -->
+      <section class="card">
+        <h3>Security</h3>
+        <p class="hint">Choose a strong password to keep your account secure.</p>
+
+        <div class="grid">
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-icon">
+              <i class="ri-lock-2-line"></i>
+              <input id="password" name="password" type="password" placeholder="Create a strong password" minlength="8" required />
+              <button type="button" class="toggle-eye" aria-label="Show password" data-target="password">
+                <i class="ri-eye-off-line"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="confirm">Confirm Password</label>
+            <div class="input-icon">
+              <i class="ri-lock-password-line"></i>
+              <input id="confirm" name="confirm" type="password" placeholder="Confirm your password" minlength="8" required />
+              <button type="button" class="toggle-eye" aria-label="Show confirm password" data-target="confirm">
+                <i class="ri-eye-off-line"></i>
+              </button>
+            </div>
+            <div id="matchMsg" class="error">Passwords do not match.</div>
+          </div>
+        </div>
+
+        <label class="policy">
+          <input type="checkbox" id="policyChk" />
+          <span>I agree to LumiChat’s <a href="#">Privacy Policy</a> and understand how my data will be used to provide mental health support services.</span>
+        </label>
+
+        <button id="submitBtn" class="btn-primary" type="submit" disabled>
+          Register Account
+        </button>
+
+        <div id="formMsg" class="error" style="text-align:center"></div>
+      </section>
+
+      <div class="footer-link">
+        Already have an account? <a href="index.html">Return to Login</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Enable/disable submit by policy checkbox
+    const chk = document.getElementById('policyChk');
+    const submitBtn = document.getElementById('submitBtn');
+    chk.addEventListener('change', () => submitBtn.disabled = !chk.checked);
+
+    // Toggle show/hide password
+    document.querySelectorAll('.toggle-eye').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const target = document.getElementById(btn.dataset.target);
+        const icon = btn.querySelector('i');
+        const isPwd = target.type === 'password';
+        target.type = isPwd ? 'text' : 'password';
+        icon.className = isPwd ? 'ri-eye-line' : 'ri-eye-off-line';
+      });
+    });
+
+    // Simple validation: match passwords
+    const pass = document.getElementById('password');
+    const conf = document.getElementById('confirm');
+    const matchMsg = document.getElementById('matchMsg');
+    function checkMatch(){
+      if(conf.value && pass.value !== conf.value){
+        matchMsg.classList.add('show');
+        return false;
+      }else{
+        matchMsg.classList.remove('show');
+        return true;
+      }
+    }
+    pass.addEventListener('input', checkMatch);
+    conf.addEventListener('input', checkMatch);
+
+    // Submit handler (demo)
+    const form = document.getElementById('regForm');
+    const formMsg = document.getElementById('formMsg');
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      formMsg.classList.remove('show');
+      if(!checkMatch()){
+        formMsg.textContent = 'Please fix the errors above.';
+        formMsg.classList.add('show');
+        return;
+      }
+      if(!form.reportValidity()){
+        return; // native messages will show
+      }
+      alert('Registration submitted successfully!');
+      form.reset();
+      submitBtn.disabled = true;
+    });
+  </script>
+</body>
+</html>
